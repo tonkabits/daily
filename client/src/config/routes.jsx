@@ -5,6 +5,7 @@ import Signup from "../pages/Signup";
 import ProtectedPage from "../pages/ProtectedPage";
 import * as PATHS from "../utils/paths";
 import OtherPageProtected from "../pages/OtherPageProtected";
+import GoogleWorks from "../pages/GoogleWorks";
 
 const routes = (props) => {
   const { user } = props;
@@ -21,6 +22,10 @@ const routes = (props) => {
     {
       path: PATHS.LOGINPAGE,
       element: <Login {...props} />,
+    },
+    {
+      path: PATHS.GOOGLEWORKS,
+      element: <GoogleWorks {...props} />,
     },
     {
       path: PATHS.PROTECTEDPAGE,
