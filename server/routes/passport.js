@@ -18,9 +18,9 @@ passport.use(new GoogleStrategy({
 },
     function (request, accessToken, refreshToken, profile, done) {
         console.log('profile',profile)
-        User.findOrCreate({ username: profile.email })
+        User.find({ username: profile._json.email })
             .then(foundUser => {
-                console.log('foundUser', foundUser)
+                console.log('foundRes', foundUser)
             })
             .catch()
         return done(null, profile);
