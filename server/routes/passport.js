@@ -1,7 +1,7 @@
 const passport = require("passport")
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require("../models/User.model");
-var findOrCreate = require('mongoose-findorcreate')
+const findOrCreate = require('mongoose-findorcreate')
 passport.serializeUser(function (user, done) {
     done(null, user);
 });
@@ -18,9 +18,16 @@ passport.use(new GoogleStrategy({
 },
     function (request, accessToken, refreshToken, profile, done) {
         console.log('profile',profile)
-        User.find({ username: profile._json.email })
+        User.findOne({ username: profile._json.email })
             .then(foundUser => {
                 console.log('foundRes', foundUser)
+                if(foundUser && foundUser != null){
+                    console.log('we logged the found User')
+                }else{
+                    User.create({
+                        username: profile._json.email,
+                    })
+                }
             })
             .catch()
         return done(null, profile);
