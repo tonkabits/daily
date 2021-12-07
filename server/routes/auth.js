@@ -15,6 +15,15 @@ const Session = require("../models/Session.model");
 const isLoggedOut = require("../middleware/isLoggedOut");
 const isLoggedIn = require("../middleware/isLoggedIn");
 
+
+// passport notes 
+const passport = require("passport")
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const findOrCreate = require('mongoose-findorcreate')
+
+
+
+
 router.get("/session", (req, res) => {
   // we dont want to throw an error, and just maintain the user as null
   if (!req.headers.authorization) {
@@ -158,5 +167,50 @@ router.delete("/logout", isLoggedIn, (req, res) => {
       res.status(500).json({ errorMessage: err.message });
     });
 });
+
+
+
+// require('./passport');
+
+router.get('/google-login', (req, res) => {
+  passport.authenticate('google', {
+    scope:
+      ['email', 'profile']
+  })
+  passport.use(new GoogleStrategy({
+    clientID: "518153544404-dfasll0ria6qpoivih46rht0emjeskgd.apps.googleusercontent.com",
+    clientSecret: "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",
+    callbackURL: "http://localhost:5005/api/auth/google-login",
+    passReqToCallback: true
+  },
+    function (request, accessToken, refreshToken, profile, done) {
+      console.log('profile', profile)
+      User.findOne({ username: profile._json.email })
+        .then(foundUser => {
+          console.log('foundRes', foundUser)
+          if (foundUser && foundUser != null) {
+            console.log('we logged the found User')
+          } else {
+            User.create({
+              username: profile._json.email,
+            })
+          }
+        })
+        .catch()
+      return done(null, profile);
+    }
+  ));
+  console.log('works pass')
+})
+
+
+
+
+
+// )
+
+
+
+
 
 module.exports = router;
