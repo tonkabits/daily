@@ -57,6 +57,9 @@ export default function App() {
           <Route key={route.path} path={route.path} element={route.element} />
         ))}
       </Routes>
+      <h1 className="text-7xl bg-red-500 font-bold underline">
+        Hello worlsssd!
+      </h1>
     </div>
   );
 }
